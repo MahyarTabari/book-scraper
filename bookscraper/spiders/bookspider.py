@@ -1,5 +1,5 @@
 import scrapy
-
+from bookscraper.items import BookscraperItem
 
 class BookspiderSpider(scrapy.Spider):
     name = "bookspider"
@@ -43,15 +43,16 @@ class BookspiderSpider(scrapy.Spider):
 
     def parse_book_page(self, response):
         rows = response.css("table.table-striped tr")
+        book_item = BookscraperItem()
 
-        yield {
-            "category" : response.xpath("//li[@class='active']/preceding-sibling::li[1]/a/text()").get(),
-            "description" : response.xpath("//div[@id='product_description']/following-sibling::p/text()").get(),
-            "upc" : rows[0].css("td::text").get(),
-            "product_type" : rows[1].css("td::text").get(),
-            "price_excl_tax" : rows[2].css("td::text").get(),
-            "price_incl_tax" : rows[3].css("td::text").get(),
-            "tax" : rows[4].css("td::text").get(),
-            "availability" : rows[5].css("td::text").get(),
-            "n_reviews" : rows[6].css("td::text").get(),
-        }
+        book_item["category"] = response.xpath("//li[@class='active']/preceding-sibling::li[1]/a/text()").get()
+        book_item["description"] = response.xpath("//div[@id='product_description']/following-sibling::p/text()").get()
+        book_item["upc"] = rows[0].css("td::text").get()
+        book_item["product_type"] = rows[1].css("td::text").get()
+        book_item["price_excl_tax"] = rows[2].css("td::text").get()
+        book_item["price_incl_tax"] = rows[3].css("td::text").get()
+        book_item["tax"] = rows[4].css("td::text").get()
+        book_item["availability"] = rows[5].css("td::text").get()
+        book_item["n_reviews"] = rows[6].css("td::text").get()
+        
+        yield book_item
