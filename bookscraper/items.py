@@ -7,7 +7,7 @@ import scrapy
 
 
 class BookscraperItem(scrapy.Item):
-    category = scrapy.Field
+    category = scrapy.Field()
     description = scrapy.Field()
     upc = scrapy.Field()
     product_type = scrapy.Field()
